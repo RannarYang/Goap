@@ -1,0 +1,3 @@
+class StateIdle extends StateBase {
+	
+}

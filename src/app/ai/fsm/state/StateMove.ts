@@ -1,0 +1,3 @@
+class StateMove extends StateBase {
+	
+}
