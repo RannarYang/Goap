@@ -9,11 +9,16 @@ class Blacksmith extends Labourer{
 	public constructor() {
 		super();
 	}
+	protected initAvaliableActions() {
+		this.toInitAvaliableActions([ForgeToolAction, DropOffToolsAction, PickUpOreAction]);
+	}
 	/**
 	 * Our only goal will ever be to make tools.
 	 * The ForgeTooldAction will be able to fulfill this goal.
 	 */
-	public createGoalState() {
-		return {"collectTools": true}
+	public createGoalState(): Map<string, Object> {
+		let goal = new Map<string, Object>();
+		goal.set("collectTools", true);
+		return goal;
 	}
 }

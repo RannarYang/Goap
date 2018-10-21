@@ -6,11 +6,10 @@
  * @Last Modified time: 2018-09-05 20:50:47
  */
 class BackPackComponent {
-	public tool;
 	public numLogs: number;
 	public numFirewood: number;
 	public numOre: number;
-	public toolType = "toolAxe";
+	public tool: ToolComponent;
 
 	public hasOre() {
 		return this.numOre > 0;

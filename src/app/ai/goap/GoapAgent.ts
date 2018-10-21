@@ -9,13 +9,33 @@ class GoapAgent {
 
 	private stateMgr: StateManager;
 
+	private owner: IGoap;
+	public getOwner(): IGoap {
+		return this.owner;
+	}
 	private planner: GoapPlanner;
+	public getPlanner(): GoapPlanner {
+		return this.planner;
+	}
 
 	private availableActions: GoapAction[];
+	public getAvaliableActions(): GoapAction[] {
+		return this.availableActions;
+	}
 
 	private currentActions: GoapAction[];
-
-	public start() {
+	public setCurrentActions(currentActions: GoapAction[]) {
+		this.currentActions = currentActions;
+	}
+	public peekCurrentActions(): GoapAction {
+		return this.currentActions[0];
+	}
+	public dequeueCurrentActions(): GoapAction {
+		return this.currentActions.shift();
+	}
+	
+	public constructor(owner: IGoap) {
+		this.owner = owner;
 		this.initState();
 		this.planner = new GoapPlanner();
 		this.availableActions = [];
@@ -29,7 +49,76 @@ class GoapAgent {
 		stateMgr.registerState(StateEnum.StateMove, new StateMove(this))
 		stateMgr.registerState(StateEnum.StatePerformAction, new StatePerformAction(this))
 	}
+
+	public changeState(key: string, obj?: any, isForce?: boolean) {
+		this.stateMgr.changeState(key, obj, isForce);
+	}
+
+	public update(timeStamp: number) {
+		this.stateMgr.update(timeStamp);
+	}
+	public addAction(a: GoapAction) {
+		this.availableActions.push(a);
+	}
+	public getAction<T extends GoapAction>(cls: {new():T}) {
+		for(let action of this.availableActions) {
+			if(action instanceof cls) {
+				return action;
+			}
+		}
+		return null;
+	}
+	public removeAction(action: GoapAction) {
+		for(let i = 0, len = this.availableActions.length; i < len; i++) {
+			if(this.availableActions[i] == action) {
+				this.availableActions.splice(i, 1);
+				return;
+			}
+		}
+	}
+	public hasActionPlan() {
+		return this.currentActions.length > 0;
+	}
+
 	private loadActions() {
+		let actions: GoapAction[] = this.owner.getAvaliableActions();
+		for(let action of actions) {
+			this.availableActions.push(action);
+		}
+		console.log("Found actions: " + GoapAgent.prettyPrintActions(actions));
 
 	}
+	// 输出 ==================================================
+	public static prettyPrintState(state: Map<string, Object>) {
+		let s: string = "";
+		state.forEach((value, key)=>{
+			s += key + ":" + value;
+			s += ", ";
+		})
+		return s;
+	}
+
+	public static prettyPrintActionsQueue(actions: GoapAction[]): string {
+		let s: string = "";
+		actions.forEach((action: GoapAction)=>{
+			s += action.constructor.prototype.name;
+			s += "-> ";
+		})
+		s += "GOAL";
+		return s;
+	}
+
+	public static prettyPrintActions(actions: GoapAction[]) {
+		let s: string = "";
+		actions.forEach((action: GoapAction)=>{
+			s += action.constructor.prototype.name;
+			s += ", ";
+		})
+		return s;
+	}
+
+	public static prettyPrintAction(action: GoapAction) {
+		return ""+ action.constructor.prototype.name;
+	}
+
 }

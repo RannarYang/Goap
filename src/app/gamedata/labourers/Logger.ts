@@ -9,11 +9,16 @@ class Logger extends Labourer{
 	public constructor() {
 		super();
 	}
+	protected initAvaliableActions() {
+		this.toInitAvaliableActions([ChopTreeAction, DropOffLogsAction, PickUpToolAction]);
+	}
 	/**
 	 * Our only goal will ever be to chop trees.
 	 * The ChopTreeAction will be able to fulfill this goal.
 	 */
-	public createGoalState() {
-		return {"collectLogs": true}
+	public createGoalState(): Map<string, Object> {
+		let goal = new Map<string, Object>();
+		goal.set("collectLogs", true);
+		return goal;
 	}
 }

@@ -9,11 +9,16 @@ class Miner extends Labourer{
 	public constructor() {
 		super();
 	}
+	protected initAvaliableActions() {
+		this.toInitAvaliableActions([PickUpToolAction, MineOreAction, DropOffOreAction]);
+	}
 	/**
 	 * Our only goal will ever be to mine ore.
 	 * The MineOreAction will be able to fulfill this goal.
 	 */
-	public createGoalState() {
-		return {"collectOre": true}
+	public createGoalState(): Map<string, Object> {
+		let goal = new Map<string, Object>();
+		goal.set("collectOre", true);
+		return goal;
 	}
 }
