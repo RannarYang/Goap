@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="SupplyPileComponentSkin" xmlns:e="http://ns.egret.com/eui">
+	<e:Image source="supply_png" scaleX="2.5" scaleY="2.5"/>
+</e:Skin>

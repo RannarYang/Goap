@@ -11,14 +11,9 @@
  * the createGoalState() method that will populate the goal for the GOAP
  * planner.
  */
-abstract class Labourer implements IGoap{
+abstract class Labourer extends VGameObject implements IGoap{
 	/**goap agent */
 	protected goapAgent: GoapAgent;
-	/**对应的视图 */
-	protected vLabourer: VLabourer;
-	public getView() {
-		return this.vLabourer;
-	}
 	/**拥有的actions */
 	private avaliableActions: GoapAction[] = [];
 	public getAvaliableActions(): GoapAction[]{
@@ -91,8 +86,8 @@ abstract class Labourer implements IGoap{
 		// TODO:
 		let step;
 		// 设置新的position
-		this.vLabourer.moveTo(undefined, undefined);
-		if(this.vLabourer.posEquip(nextAction.target)) {
+		this.moveTo(undefined, undefined);
+		if(this.posEquip(nextAction.target)) {
 			nextAction.setInRange(true);
 			return true;
 		} else {

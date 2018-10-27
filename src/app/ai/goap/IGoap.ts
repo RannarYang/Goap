@@ -22,7 +22,6 @@ interface IGoap {
 
 	getAvaliableActions(): GoapAction[];
 
-	getView(): VGameObject;
 	/**
 	 * Give the planner a new goal so it can figure out 
 	 * the actions needed to fulfill it.

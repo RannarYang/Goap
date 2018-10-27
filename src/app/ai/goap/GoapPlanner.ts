@@ -23,7 +23,7 @@ class GoapPlanner {
 		// check what actions can run using their checkProceduralPrecondition
 		let usableActions: GoapAction[] = [];
 		for (let a of availableActions) {
-			if ( a.checkProceduralPrecondition(labourer.getView()) ){
+			if ( a.checkProceduralPrecondition(labourer as Labourer) ){
 				usableActions.push(a);
 			}
 		}

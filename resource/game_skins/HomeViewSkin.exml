@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="HomeViewSkin" width="1136" height="640" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*">
+	<w:Declarations/>
+	<e:Rect left="0" right="0" top="0" bottom="0" fillColor="0xeeeeee" locked="true"/>
+	<e:Group id="groupSupplys" x="315.34" y="170.67">
+		<ns1:SupplyPileComponent x="0" y="0" skinName="SupplyPileComponentSkin"/>
+		<ns1:SupplyPileComponent x="224.66" y="69.33" skinName="SupplyPileComponentSkin"/>
+	</e:Group>
+	<e:Group id="groupRocks" x="48" y="44">
+		<ns1:IronRockComponent x="0" y="0" skinName="IronRockComponentSkin"/>
+		<ns1:IronRockComponent x="49.97" y="10" skinName="IronRockComponentSkin"/>
+		<ns1:IronRockComponent x="0" y="42" skinName="IronRockComponentSkin"/>
+	</e:Group>
+	<e:Group id="groupTrees" x="64" y="438">
+		<ns1:TreeComponent x="0" y="16.34" skinName="TreeComponentSkin"/>
+		<ns1:TreeComponent x="71.32" y="47" skinName="TreeComponentSkin"/>
+		<ns1:TreeComponent x="48" y="0" skinName="TreeComponentSkin"/>
+		<ns1:TreeComponent x="33.97" y="63" skinName="TreeComponentSkin"/>
+	</e:Group>
+	
+	
+	<ns1:Blacksmith skinName="BlackSmithSkin" x="803.34" y="250.67"/>
+	<ns1:Logger skinName="LoggerSkin" x="345.34" y="388"/>
+	<ns1:Miner x="142.32" y="225.67" skinName="MinnerSkin"/>
+	<ns1:WoodCutter x="315.34" y="44" skinName="WoodCutterSkin"/>
+	<ns1:ChoppingBlockComponent id="ChoppingBlockComp" skinName="ChoppingBlockComponentSkin" x="411.34" y="518.34"/>
+	<ns1:ForgeComponent id="forgeComp" skinName="ForgeComponentSkin" x="920" y="298.67"/>
+</e:Skin>
