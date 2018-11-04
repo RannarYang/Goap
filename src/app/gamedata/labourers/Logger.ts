@@ -3,9 +3,11 @@
  * @Author: Rannar.Yang 
  * @Date: 2018-09-05 20:40:44 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:21:33
+ * @Last Modified time: 2018-11-04 18:22:04
  */
 class Logger extends Labourer{
+	private txtLogNum: eui.Label;
+	public type = LabourerType.Logger;
 	public constructor() {
 		super();
 	}
@@ -18,7 +20,11 @@ class Logger extends Labourer{
 	 */
 	public createGoalState(): Map<string, Object> {
 		let goal = new Map<string, Object>();
-		goal.set("collectLogs", true);
+		goal.set(ActionStatus.CollectLogs, true);
 		return goal;
+	}
+
+	public updateBackPack() {
+		this.txtLogNum.text = "原木：" + this.backpack.numLogs;
 	}
 }

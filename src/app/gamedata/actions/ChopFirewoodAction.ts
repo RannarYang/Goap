@@ -2,25 +2,22 @@
  * @Description: 
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:09:09 
- * @Last Modified by:   RannarYang 
- * @Last Modified time: 2018-09-06 00:09:09 
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-11-04 17:35:57
  */
 class ChopFirewoodAction extends GoapAction{
 	private chopped: boolean = false;
-	/**where we chop the firewood */
-	private targetChoppingBlock: ChoppingBlockComponent;
 	
 	private startTime: number = 0;
 	public workDuration: number = 2;
 	public constructor() {
 		super();
-		this.addPrecondition("hasTool", true); // we need a tool to do this
-		this.addPrecondition("hasFirewood", false); // if we have firewood we don't want more
-		this.addEffect("hasFirewood", true);
+		this.addPrecondition(ActionStatus.HasTool, true); // we need a tool to do this
+		this.addPrecondition(ActionStatus.HasFirewood, false); // if we have firewood we don't want more
+		this.addEffect(ActionStatus.HasFirewood, true);
 	}
 	public reset() {
 		this.chopped = false;
-		this.targetChoppingBlock = null;
 		this.startTime = 0;
 	}
 	public isDone() {
@@ -32,8 +29,9 @@ class ChopFirewoodAction extends GoapAction{
 	}
 
 	public checkProceduralPrecondition (agent: VGameObject): boolean {
-		// TODO:find the nearest chopping block that we can chop our wood at
-		let blocks: ChoppingBlockComponent[] = [];
+		let labourer: Labourer = agent as Labourer;
+		// find the nearest chopping block that we can chop our wood at
+		let blocks: ChoppingBlockComponent[] = Environment.choppingBlockComps;
 		let closest: ChoppingBlockComponent = null;
 		let closestDist: number = 0;
 		
@@ -55,8 +53,7 @@ class ChopFirewoodAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetChoppingBlock = closest;
-		this.target = this.targetChoppingBlock;
+		this.target = closest;
 		
 		return closest != null;
 	}
@@ -71,11 +68,11 @@ class ChopFirewoodAction extends GoapAction{
 			let backpack: BackPackComponent = labourer.backpack;
 			backpack.numFirewood += 5;
 			this.chopped = true;
-			let tool = backpack.tool;
+			let tool = labourer.tool;
 			tool.use(0.34);
 			if (tool.destroyed()) {
 				// TODO:删除 Destroy(backpack.tool);
-				backpack.tool = null;
+				labourer.destroyTool();
 			}
 		}
 		return true;

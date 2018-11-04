@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="EnvironmentViewSkin" width="1136" height="640" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*">
+	<w:Declarations/>
+	<e:Rect left="0" right="0" top="0" bottom="0" fillColor="0xeeeeee" locked="true"/>
+	<ns1:SupplyPileComponent id="supplyPileComp1" x="315.34" y="170.67" skinName="SupplyPileComponentSkin" numTools="2" numOre="2" numLogs="2" numFirewood="0"/>
+	<ns1:SupplyPileComponent id="supplyPileComp2" x="540" y="240" skinName="SupplyPileComponentSkin" numLogs="0" numOre="0" numTools="0" numFirewood="0"/>
+	<ns1:IronRockComponent id="ironRockComp1" x="48" y="44" skinName="IronRockComponentSkin"/>
+	<ns1:IronRockComponent id="ironRockComp2" x="97.97" y="54" skinName="IronRockComponentSkin"/>
+	<ns1:IronRockComponent id="ironRockComp3" x="48" y="86" skinName="IronRockComponentSkin"/>
+	<ns1:TreeComponent id="treeComp1" x="64" y="454.34" skinName="TreeComponentSkin"/>
+	<ns1:TreeComponent id="treeComp2" x="135.32" y="485" skinName="TreeComponentSkin"/>
+	<ns1:TreeComponent id="treeComp3" x="112" y="438" skinName="TreeComponentSkin"/>
+	<ns1:TreeComponent id="treeComp4" x="97.97" y="501" skinName="TreeComponentSkin"/>
+	<ns1:ChoppingBlockComponent id="choppingBlockComp" skinName="ChoppingBlockComponentSkin" x="411.34" y="518.34"/>
+	<ns1:ForgeComponent id="forgeComp" skinName="ForgeComponentSkin" x="920" y="298.67"/>
+
+	<ns1:Blacksmith id="blackSmith" skinName="BlackSmithSkin" x="803.34" y="250.67"/>
+	<ns1:Logger id="logger" skinName="LoggerSkin" x="345.34" y="388"/>
+	<ns1:Miner id="miner" x="142.32" y="225.67" skinName="MinnerSkin"/>
+	<ns1:WoodCutter id="woodCutter" x="315.34" y="44" skinName="WoodCutterSkin"/>
+</e:Skin>

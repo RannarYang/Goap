@@ -2,10 +2,13 @@
  * @Description: 铁匠
  * @Author: Rannar.Yang 
  * @Date: 2018-09-05 20:40:44 
- * @Last Modified by: Rannar.Yang
- * @Last Modified time: 2018-09-05 20:54:55
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-11-04 18:42:34
  */
 class Blacksmith extends Labourer{
+	private txtOreNum: eui.Label;
+	
+	public type = LabourerType.Blacksmith;
 	public constructor() {
 		super();
 	}
@@ -18,7 +21,11 @@ class Blacksmith extends Labourer{
 	 */
 	public createGoalState(): Map<string, Object> {
 		let goal = new Map<string, Object>();
-		goal.set("collectTools", true);
+		goal.set(ActionStatus.CollectTools, true);
 		return goal;
+	}
+
+	public updateBackPack() {
+		this.txtOreNum.text = "矿石：" + this.backpack.numOre;
 	}
 }

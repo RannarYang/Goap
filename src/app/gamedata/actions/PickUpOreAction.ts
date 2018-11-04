@@ -3,20 +3,19 @@
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:14:55 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:15:20
+ * @Last Modified time: 2018-10-28 11:37:41
  */
 class PickUpOreAction extends GoapAction{
 	private hasOre: boolean = false;
-	private targetSupplyPile: SupplyPileComponent; // where we get the ore from
+	public target: SupplyPileComponent; // where we get the ore from
 	public constructor() {
 		super();
-		this.addPrecondition ("hasOre", false); // don't get a ore if we already have one
-		this.addEffect ("hasOre", true); // we now have a ore
+		this.addPrecondition (ActionStatus.HasOre, false); // don't get a ore if we already have one
+		this.addEffect (ActionStatus.HasOre, true); // we now have a ore
 	}
 
 	public reset(): void {
 		this.hasOre = false;
-		this.targetSupplyPile = null;
 	}
 
 	public isDone(): boolean {
@@ -28,8 +27,8 @@ class PickUpOreAction extends GoapAction{
 	}
 
 	public checkProceduralPrecondition (agent: VGameObject): boolean{
-		//TODO: find the nearest supply pile that has spare ores
-		let supplyPiles: SupplyPileComponent[] = [];
+		//find the nearest supply pile that has spare ores
+		let supplyPiles: SupplyPileComponent[] = Environment.supplyPileComps;
 		let closest: SupplyPileComponent = null;
 		let closestDist: number = 0;
 		
@@ -53,15 +52,14 @@ class PickUpOreAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetSupplyPile = closest;
-		this.target = this.targetSupplyPile;
+		this.target = closest;
 		
 		return closest != null;
 	}
 	
 	public perform (labourer: Labourer): boolean {
-		if (this.targetSupplyPile.numOre >= 3) {
-			this.targetSupplyPile.numOre -= 3;
+		if (this.target.numOre >= 3) {
+			this.target.numOre -= 3;
 			this.hasOre = true;
 			//TODO play effect, change actor icon
 			let backpack: BackPackComponent = labourer.backpack;

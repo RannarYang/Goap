@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="SupplyPileComponentSkin" xmlns:e="http://ns.egret.com/eui">
+<e:Skin class="SupplyPileComponentSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
 	<e:Image source="supply_png" scaleX="2.5" scaleY="2.5"/>
+	<e:Group y="17" horizontalCenter="0">
+		<e:Label id="txtToolNum" text="工具：" x="0" y="0" fontFamily="Microsoft YaHei" stroke="2" size="22"/>
+		<e:Label id="txtOreNum" text="矿：" x="10" y="10" stroke="2" size="22" fontFamily="Microsoft YaHei"/>
+		<e:Label id="txtLogNum" text="原木：" x="20" y="20" stroke="2" size="22" fontFamily="Microsoft YaHei"/>
+		<e:Label id="txtFirewoodNum" text="木柴：" x="30" y="30" stroke="2" size="22" fontFamily="Microsoft YaHei"/>
+		<e:layout>
+			<e:VerticalLayout/>
+		</e:layout>
+	</e:Group>
 </e:Skin>

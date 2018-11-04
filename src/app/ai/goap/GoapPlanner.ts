@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:09:35 
- * @Last Modified by:   RannarYang 
- * @Last Modified time: 2018-09-06 00:09:35 
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-11-04 18:04:36
  */
 /**
  * Plans what actions can be completed in order to fulfill a goal state.
@@ -14,7 +14,8 @@ class GoapPlanner {
 	 * Returns null if a plan could not be found, or a list of the actions
 	 * that must be performed, in order, to fulfill the goal.
 	 */
-	public plan(labourer: IGoap, availableActions: GoapAction[], worldState: Map<string, Object>, goal: Map<string, Object>): GoapAction[] {
+	public plan(iGoap: IGoap, availableActions: GoapAction[], worldState: Map<ActionStatus, Object>, goal: Map<ActionStatus, Object>): GoapAction[] {
+		let labourer: Labourer = iGoap as Labourer;
 		// reset the actions so we can start fresh with them
 		for (let a of availableActions) {
 			a.doReset ();
@@ -40,6 +41,7 @@ class GoapPlanner {
 		if(!success) {
 			// oh no, we didn't get a plan
 			console.log("NO PLan");
+			return null;
 		}
 
 		// get the cheapest leaf
@@ -87,7 +89,7 @@ class GoapPlanner {
 	 * 'runningCost' value where the lowest cost will be the best action
 	 * sequence.
 	 */
-	private buildGraph(parent: PlanNode, leaves: PlanNode[], usableActions: GoapAction[], goal: Map<string, Object>): boolean {
+	private buildGraph(parent: PlanNode, leaves: PlanNode[], usableActions: GoapAction[], goal: Map<ActionStatus, Object>): boolean {
 		let foundOne: boolean = false;
 
 		// go through each action available at this node and see if we can use it here
@@ -95,8 +97,7 @@ class GoapPlanner {
 			// if the parent state has the conditions for this action's preconditions, we can use it here
 			if(this.inState(action.Preconditions, parent.state)) {
 				// apply the action's effects to the parent state
-				let currentState: Map<string, Object> = this.populateState (parent.state, action.Effects);
-				//Debug.Log(GoapAgent.prettyPrint(currentState));
+				let currentState: Map<ActionStatus, Object> = this.populateState (parent.state, action.Effects);
 				let node: PlanNode = new PlanNode(parent, parent.runningCost + action.cost, currentState, action);
 
 				if(this.inState(goal, currentState)) {
@@ -105,7 +106,9 @@ class GoapPlanner {
 					foundOne = true;
 				} else {
 					// not at a solution yet, so test all the remaining actions and branch out the tree
+					
 					let subset: GoapAction[] = this.actionSubset(usableActions, action);
+					
 					let found = this.buildGraph(node, leaves, subset, goal);
 					if(found) {
 						foundOne = true;
@@ -121,7 +124,7 @@ class GoapPlanner {
 	 * Check that all items in 'test' are in 'state'. If just one does not match or is not there
 	 * then this returns false.
 	 */
-	private inState(test: Map<string, Object>, state: Map<string, Object>): boolean {
+	private inState(test: Map<ActionStatus, Object>, state: Map<ActionStatus, Object>): boolean {
 		let testKeyArr = Array.from(test.keys());
 		for(let key of testKeyArr) {
 			if(test.get(key) != state.get(key)) {
@@ -134,19 +137,16 @@ class GoapPlanner {
 	/**
 	 * Apply the stateChange to the currentState
 	 */
-	private populateState(currentState: Map<string, Object>, stateChange: Map<string, Object>): Map<string, Object> {
-		let state: Map<string, Object> = new Map<string, Object>();
+	private populateState(currentState: Map<ActionStatus, Object>, stateChange: Map<ActionStatus, Object>): Map<ActionStatus, Object> {
+		let state: Map<ActionStatus, Object> = new Map<ActionStatus, Object>();
 		// copy the KVPs over as new objects
-		currentState.forEach((value: Object, key: string)=>{
+		currentState.forEach((value: Object, key: ActionStatus)=>{
 			state.set(key, value);
 		})
 
-		let stateChangeKeyArr = Array.from(stateChange.keys());
-
-		for(let key of stateChangeKeyArr) {
-			// update the Value in state
-			state.set(key, stateChange.get(key));
-		}
+		stateChange.forEach((value: Object, key: ActionStatus)=>{
+			state.set(key, value);
+		})
 
 		return state;
 	}
@@ -155,10 +155,10 @@ class GoapPlanner {
 class PlanNode {
 	public parent: PlanNode;
 	public runningCost: number;
-	public state: Map<string, Object>;
+	public state: Map<ActionStatus, Object>;
 	public action: GoapAction;
 
-	constructor(parent: PlanNode, runningCost: number, state: Map<string, Object>, action: GoapAction) {
+	constructor(parent: PlanNode, runningCost: number, state: Map<ActionStatus, Object>, action: GoapAction) {
 		this.parent = parent;
 		this.runningCost = runningCost;
 		this.state = state;

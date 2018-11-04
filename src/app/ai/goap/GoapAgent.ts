@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:09:30 
- * @Last Modified by:   RannarYang 
- * @Last Modified time: 2018-09-06 00:09:30 
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-11-04 17:41:31
  */
 class GoapAgent {
 
@@ -33,6 +33,10 @@ class GoapAgent {
 	public dequeueCurrentActions(): GoapAction {
 		return this.currentActions.shift();
 	}
+
+	public getCurrentActions(): GoapAction[] {
+		return this.currentActions;
+	}
 	
 	public constructor(owner: IGoap) {
 		this.owner = owner;
@@ -54,8 +58,8 @@ class GoapAgent {
 		this.stateMgr.changeState(key, obj, isForce);
 	}
 
-	public update(timeStamp: number) {
-		this.stateMgr.update(timeStamp);
+	public update(delta: number) {
+		this.stateMgr.update(delta);
 	}
 	public addAction(a: GoapAction) {
 		this.availableActions.push(a);
@@ -89,7 +93,7 @@ class GoapAgent {
 
 	}
 	// 输出 ==================================================
-	public static prettyPrintState(state: Map<string, Object>) {
+	public static prettyPrintState(state: Map<ActionStatus, Object>) {
 		let s: string = "";
 		state.forEach((value, key)=>{
 			s += key + ":" + value;
@@ -99,9 +103,10 @@ class GoapAgent {
 	}
 
 	public static prettyPrintActionsQueue(actions: GoapAction[]): string {
+		console.log("prettyPrintActionsQueue: ", actions)
 		let s: string = "";
 		actions.forEach((action: GoapAction)=>{
-			s += action.constructor.prototype.name;
+			s += action.constructor.name;
 			s += "-> ";
 		})
 		s += "GOAL";
@@ -111,14 +116,14 @@ class GoapAgent {
 	public static prettyPrintActions(actions: GoapAction[]) {
 		let s: string = "";
 		actions.forEach((action: GoapAction)=>{
-			s += action.constructor.prototype.name;
+			s += action.constructor.name;
 			s += ", ";
 		})
 		return s;
 	}
 
 	public static prettyPrintAction(action: GoapAction) {
-		return ""+ action.constructor.prototype.name;
+		return ""+ action.constructor.name;
 	}
 
 }

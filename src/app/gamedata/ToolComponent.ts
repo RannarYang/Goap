@@ -1,7 +1,8 @@
-class ToolComponent {
+class ToolComponent extends eui.Image {
 	/**[0..1] or 0% to 100% */
 	public strength: number;
 	public constructor() {
+		super();
 		this.strength = 1; // full strength
 	}
 
@@ -12,4 +13,6 @@ class ToolComponent {
 	public destroyed(): boolean {
 		return this.strength <= 0;
 	}
+
 }
+

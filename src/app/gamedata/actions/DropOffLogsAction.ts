@@ -3,21 +3,20 @@
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:08:59 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:10:15
+ * @Last Modified time: 2018-10-28 11:34:06
  */
 class DropOffLogsAction extends GoapAction{
 	private droppedOffLogs: boolean = false;
-	private targetSupplyPile: SupplyPileComponent; // where we drop off the logs
+	public target: SupplyPileComponent;
 	public constructor() {
 		super();
-		this.addPrecondition ("hasLogs", true); // can't drop off logs if we don't already have some
-		this.addEffect ("hasLogs", false); // we now have no logs
-		this.addEffect ("collectLogs", true); // we collected logs
+		this.addPrecondition (ActionStatus.HasLogs, true); // can't drop off logs if we don't already have some
+		this.addEffect (ActionStatus.HasLogs, false); // we now have no logs
+		this.addEffect (ActionStatus.CollectLogs, true); // we collected logs
 	}
 
 	public reset() {
 		this.droppedOffLogs = false;
-		this.targetSupplyPile = null;
 	}
 
 	public isDone(): boolean {
@@ -30,7 +29,7 @@ class DropOffLogsAction extends GoapAction{
 
 	public checkProceduralPrecondition (agent: VGameObject): boolean {
 		// TODO:find the nearest supply pile
-		let supplyPiles: SupplyPileComponent[] = [];
+		let supplyPiles: SupplyPileComponent[] = Environment.supplyPileComps;
 		let closest: SupplyPileComponent = null;
 		let closestDist: number = 0;
 		
@@ -52,15 +51,14 @@ class DropOffLogsAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetSupplyPile = closest;
-		this.target = this.targetSupplyPile;
+		this.target = closest;
 		
 		return closest != null;
 	}
 	
 	public perform (labourer: Labourer): boolean{
 		let backpack: BackPackComponent = labourer.backpack;
-		this.targetSupplyPile.numLogs += backpack.numLogs;
+		this.target.numLogs += backpack.numLogs;
 		this.droppedOffLogs = true;
 		backpack.numLogs = 0;
 		

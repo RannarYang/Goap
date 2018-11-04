@@ -21,6 +21,7 @@ class StatePerformAction extends StateBase{
             // the action is done. Remove it so we can perform the next one
             this.owner.dequeueCurrentActions();
         }
+        
 
         if(this.owner.hasActionPlan()) {
             // perform the next action

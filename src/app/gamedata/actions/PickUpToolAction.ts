@@ -3,20 +3,19 @@
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:15:38 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:16:12
+ * @Last Modified time: 2018-11-04 17:47:27
  */
 class PickUpToolAction extends GoapAction {
 	private hasTool: boolean = false;
-	private targetSupplyPile: SupplyPileComponent; // where we get the tool from
+	public target: SupplyPileComponent; // where we get the tool from
 	public constructor() {
 		super();
-		this.addPrecondition ("hasTool", false); // don't get a tool if we already have one
-		this.addEffect ("hasTool", true); // we now have a tool
+		this.addPrecondition (ActionStatus.HasTool, false); // don't get a tool if we already have one
+		this.addEffect (ActionStatus.HasTool, true); // we now have a tool
 	}
 
 	public reset(): void {
 		this.hasTool = false;
-		this.targetSupplyPile = null;
 	}
 
 	public isDone(): boolean {
@@ -29,7 +28,7 @@ class PickUpToolAction extends GoapAction {
 
 	public checkProceduralPrecondition (agent: VGameObject): boolean{
 		//TODO: find the nearest supply pile that has spare tools
-		let supplyPiles: SupplyPileComponent[] = [];
+		let supplyPiles: SupplyPileComponent[] = Environment.supplyPileComps;
 		let closest: SupplyPileComponent = null;
 		let closestDist: number = 0;
 
@@ -53,26 +52,17 @@ class PickUpToolAction extends GoapAction {
 		if (closest == null)
 			return false;
 
-		this.targetSupplyPile = closest;
-		this.target = this.targetSupplyPile;
+		this.target = closest;
 
 		return closest != null;
 	}
 
 	public perform (labourer: Labourer): boolean {
-		if (this.targetSupplyPile.numTools > 0) {
-			this.targetSupplyPile.numTools -= 1;
+		if (this.target.numTools > 0) {
+			this.target.numTools -= 1;
 			this.hasTool = true;
-
 			// create the tool and add it to the agent
-
-			let backpack: BackPackComponent = labourer.backpack;
-			// TODO:
-			// GameObject prefab = Resources.Load<GameObject> (backpack.toolType);
-			// GameObject tool = Instantiate (prefab, transform.position, transform.rotation) as GameObject;
-			// backpack.tool = tool;
-			// tool.transform.parent = transform; // attach the tool
-
+			labourer.pickUpTool();
 			return true;
 		} else {
 			// we got there but there was no tool available! Someone got there first. Cannot perform action

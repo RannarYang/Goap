@@ -4,7 +4,7 @@ class StateMove extends StateBase {
      * 状态更新 
      * @return 
      */		
-    public onUpdate(timeStamp: number): void {
+    public onUpdate(delta: number): void {
         let iGoap: IGoap = this.owner.getOwner();
         
         // move the game object
@@ -17,7 +17,7 @@ class StateMove extends StateBase {
         }
 
         // get the agent to move itself
-        if(iGoap.moveAgent(action)) {
+        if(iGoap.moveAgent(action, delta)) {
             this.owner.changeState(StateEnum.StatePerformAction);
         }
     }

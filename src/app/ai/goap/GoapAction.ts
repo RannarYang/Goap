@@ -6,8 +6,8 @@
  * @Last Modified time: 2018-09-06 00:09:26 
  */
 abstract class GoapAction {
-	private preconditions: Map<string, Object>;
-	private effects: Map<string, Object>;
+	private preconditions: Map<ActionStatus, Object>;
+	private effects: Map<ActionStatus, Object>;
 
 	private inRange: boolean = false;
 
@@ -21,8 +21,8 @@ abstract class GoapAction {
 	public target: VGameObject;
 
 	public constructor() {
-		this.preconditions = new Map<string, Object>();
-		this.effects = new Map<string, Object>();
+		this.preconditions = new Map<ActionStatus, Object>();
+		this.effects = new Map<ActionStatus, Object>();
 	}
 
 	public doReset() {
@@ -74,18 +74,18 @@ abstract class GoapAction {
 	}
 
 	public addPrecondition(key: string, value: any) {
-		this.preconditions[key] = value;
+		this.preconditions.set(key, value)
 	}
 
 	public removePrecondition(key: string) {
-		delete this.preconditions[key];
+		this.preconditions.delete(key);
 	}
 
 	public addEffect(key: string, value: any) {
-		this.effects[key] = value;
+		this.effects.set(key, value);
 	}
 	public removeEffect(key: string) {
-		delete this.effects[key];
+		this.effects.delete(key);
 	}
 	public get Preconditions() {
 		return this.preconditions;

@@ -3,7 +3,7 @@
  * @Author: Rannar.Yang 
  * @Date: 2018-09-05 20:52:30 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:23:36
+ * @Last Modified time: 2018-11-04 18:31:49
  */
 /**
  * A general labourer class.
@@ -12,6 +12,7 @@
  * planner.
  */
 abstract class Labourer extends VGameObject implements IGoap{
+	abstract type: LabourerType;
 	/**goap agent */
 	protected goapAgent: GoapAgent;
 	/**拥有的actions */
@@ -28,30 +29,36 @@ abstract class Labourer extends VGameObject implements IGoap{
 	}
 	/**背包 */
 	public backpack: BackPackComponent;
-	/**工具类型（可能会走配置） */
-	protected toolType: string;
-	protected tool: ToolComponent;
 
-	public moveSpeed: number = 1;
+	public bean: T_LabourerBean;
+	public tool: ToolComponent;
 
-	public start() {
-		this.backpack = new BackPackComponent();
+	public childrenCreated() {
+		super.childrenCreated();
+		this.bean = GameDataManager.I.t_labourderContainer.getLabourerByType(this.type)
 		if(!this.tool) {
-			let tool = this.tool = new ToolComponent();
-			// TODO:加入到显示里
-			this.backpack.tool = tool;
+			this.pickUpTool();
 		}
 		this.initAvaliableActions();
+		this.goapAgent = new GoapAgent(this);
 	}
 	protected initAvaliableActions() {}
 
+	public update(delta: number) {
+		this.goapAgent.update(delta);
+	}
+
 	public getWorldState(): Map<string, Object> {
 		let worldData: Map<string, Object> = new Map<string, Object>();
-		worldData.set("hasOre", this.backpack.hasOre());
-		worldData.set("hasLogs", this.backpack.hasLog());
-		worldData.set("hasFirewood", this.backpack.hasFirewood());
-		worldData.set("hasTool", this.backpack.hasTool());
+		worldData.set(ActionStatus.HasOre, this.backpack.hasOre());
+		worldData.set(ActionStatus.HasLogs, this.backpack.hasLog());
+		worldData.set(ActionStatus.HasFirewood, this.backpack.hasFirewood());
+		worldData.set(ActionStatus.HasTool, this.hasTool());
 		return worldData;
+	}
+
+	private hasTool() {
+		return this.tool != null;
 	}
 
 	/**
@@ -67,7 +74,7 @@ abstract class Labourer extends VGameObject implements IGoap{
 
 	public planFound(goal: Map<string, Object>, actions: GoapAction[]) {
 		// Yay we found a plan for our goal
-		console.log("Plan found: "+GoapAgent.prettyPrintActionsQueue(actions));
+		console.log("Plan found: ", GoapAgent.prettyPrintActionsQueue(actions));
 	}
 
 	public actionsFinished(): void {
@@ -82,16 +89,38 @@ abstract class Labourer extends VGameObject implements IGoap{
 		console.log ("Plan Aborted: " + GoapAgent.prettyPrintAction(aborter));
 	}
 
-	public moveAgent(nextAction: GoapAction) {
-		// TODO:
-		let step;
+	public moveAgent(nextAction: GoapAction, delta: number) {
+		let step = this.bean.speed * delta;
+		let target = nextAction.target;
 		// 设置新的position
-		this.moveTo(undefined, undefined);
-		if(this.posEquip(nextAction.target)) {
+		this.moveTo(target, step);
+		if(this.posEquip(target)) {
 			nextAction.setInRange(true);
 			return true;
 		} else {
 			return false;
 		}
+	}
+	/**设置背包里的物品 */
+	public setBackPack(backpack: BackPackComponent) {
+		this.backpack = backpack;
+		backpack.setOwner(this);
+	}
+	/**拾取工具 */
+	public pickUpTool() {
+		let tool = this.tool = new ToolComponent();
+		tool.x = 18;
+		tool.y = 35;
+		tool.source = ToolType.getSource(this.bean.toolType);
+		this.addChild(tool);
+	}
+	/**销毁工具 */
+	public destroyTool() {
+		this.removeChild(this.tool);
+		this.tool = undefined;
+	}
+
+	public updateBackPack() {
+		
 	}
 }

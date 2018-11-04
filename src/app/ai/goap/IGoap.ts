@@ -57,5 +57,5 @@ interface IGoap {
 	 * Return true if the Agent is at the target and the next action can perform.
 	 * False if it is not there yet.
 	 */
-	moveAgent(nextAction: GoapAction): boolean;
+	moveAgent(nextAction: GoapAction, delta: number): boolean;
 }

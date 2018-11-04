@@ -2,24 +2,22 @@
  * @Description: 
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:09:12 
- * @Last Modified by:   RannarYang 
- * @Last Modified time: 2018-09-06 00:09:12 
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-10-28 11:32:23
  */
 class ChopTreeAction extends GoapAction{
 	private chopped: boolean = false;
-	private targetTree: TreeComponent; // where we get the logs from
 
 	private startTime: number = 0;
 	private workDuration: number = 2; // seconds
 	public constructor() {
 		super();
-		this.addPrecondition("hasTool", true); // we need a tool to do this
-		this.addPrecondition("hasLogs", false); // if we have logs we don't want more
-		this.addEffect("hasLogs", true);
+		this.addPrecondition(ActionStatus.HasTool, true); // we need a tool to do this
+		this.addPrecondition(ActionStatus.HasLogs, false); // if we have logs we don't want more
+		this.addEffect(ActionStatus.HasLogs, true);
 	}
 	public reset(): void {
 		this.chopped = false;
-		this.targetTree = null;
 		this.startTime = 0;
 	}
 
@@ -32,7 +30,7 @@ class ChopTreeAction extends GoapAction{
 	}
 	public checkProceduralPrecondition (agent: VGameObject): boolean {
 		// TODO:find the nearest tree that we can chop
-		let trees :TreeComponent[] = [];
+		let trees :TreeComponent[] = Environment.treeComps;
 		let closest: TreeComponent = null;
 		let closestDist: number = 0;
 		
@@ -54,8 +52,7 @@ class ChopTreeAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetTree = closest;
-		this.target = this.targetTree;
+		this.target = closest;
 		
 		return closest != null;
 	}
@@ -67,14 +64,15 @@ class ChopTreeAction extends GoapAction{
 		
 		if (egret.getTimer() - this.startTime > this.workDuration) {
 			// finished chopping
-			let backpack: BackPackComponent = labourer.backpack;;
+			let backpack: BackPackComponent = labourer.backpack;
 			backpack.numLogs += 1;
 			this.chopped = true;
-			let tool: ToolComponent = backpack.tool;
+			let tool: ToolComponent = labourer.tool;
 			tool.use(0.34);
 			if (tool.destroyed()) {
 				// TODO: Destroy(backpack.tool);
-				backpack.tool = null;
+				// backpack.tool = null;
+				labourer.destroyTool();
 			}
 		}
 		return true;

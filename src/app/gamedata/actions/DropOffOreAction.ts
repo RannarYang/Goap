@@ -2,22 +2,21 @@
  * @Description: 
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:11:26 
- * @Last Modified by:   RannarYang 
- * @Last Modified time: 2018-09-06 00:11:26 
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-10-28 11:34:51
  */
 class DropOffOreAction extends GoapAction{
 	private droppedOffOre = false;
-	private targetSupplyPile: SupplyPileComponent; // where we drop off the ore
+	public target: SupplyPileComponent; // where we drop off the ore
 	public constructor() {
 		super();
-		this.addPrecondition ("hasOre", true); // can't drop off ore if we don't already have some
-		this.addEffect ("hasOre", false); // we now have no ore
-		this.addEffect ("collectOre", true); // we collected ore
+		this.addPrecondition (ActionStatus.HasOre, true); // can't drop off ore if we don't already have some
+		this.addEffect (ActionStatus.HasOre, false); // we now have no ore
+		this.addEffect (ActionStatus.CollectOre, true); // we collected ore
 	}
 
 	public reset() {
 		this.droppedOffOre = false;
-		this.targetSupplyPile = null;
 	}
 
 	public isDone(): boolean {
@@ -28,7 +27,7 @@ class DropOffOreAction extends GoapAction{
 	}
 	public checkProceduralPrecondition (agent: VGameObject): boolean{
 		//TODO: find the nearest supply pile that has spare ore
-		let supplyPiles: SupplyPileComponent[] = [];
+		let supplyPiles: SupplyPileComponent[] = Environment.supplyPileComps;
 		let closest: SupplyPileComponent = null;
 		let closestDist: number = 0;
 		
@@ -50,15 +49,14 @@ class DropOffOreAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetSupplyPile = closest;
-		this.target = this.targetSupplyPile;
+		this.target = closest;
 		
 		return closest != null;
 	}
 	
 	public perform (labourer: Labourer): boolean {
 		let backpack: BackPackComponent = labourer.backpack;
-		this.targetSupplyPile.numOre += backpack.numOre;
+		this.target.numOre += backpack.numOre;
 		this.droppedOffOre = true;
 		backpack.numOre = 0;
 		//TODO play effect, change actor icon

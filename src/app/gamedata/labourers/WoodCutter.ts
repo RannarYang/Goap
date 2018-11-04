@@ -2,10 +2,12 @@
  * @Description: 伐木工
  * @Author: Rannar.Yang 
  * @Date: 2018-09-05 20:40:44 
- * @Last Modified by: Rannar.Yang
- * @Last Modified time: 2018-09-05 20:59:35
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-11-04 18:28:30
  */
 class WoodCutter extends Labourer{
+	private txtFireWoodNum: eui.Label;
+	public type = LabourerType.WoodCutter;
 	public constructor() {
 		super();
 	}
@@ -18,7 +20,11 @@ class WoodCutter extends Labourer{
 	 */
 	public createGoalState(): Map<string, Object> {
 		let goal = new Map<string, Object>();
-		goal.set("collectFirewood", true);
+		goal.set(ActionStatus.CollectFirewood, true);
 		return goal;
+	}
+
+	public updateBackPack() {
+		this.txtFireWoodNum.text = "木柴：" + this.backpack.numFirewood;
 	}
 }

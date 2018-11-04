@@ -3,23 +3,22 @@
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:12:33 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:13:20
+ * @Last Modified time: 2018-10-28 11:36:06
  */
 class ForgeToolAction extends GoapAction{
 	private forged: boolean = false;
-	private targetForge: ForgeComponent; // where we forge tools
+	public target: ForgeComponent; // where we forge tools
 
 	private startTime: number = 0;
 	private forgeDuration: number = 2; // seconds
 	public constructor() {
 		super();
-		this.addPrecondition ("hasOre", true);
-		this.addEffect ("hasNewTools", true);
+		this.addPrecondition (ActionStatus.HasOre, true);
+		this.addEffect (ActionStatus.HasNewTools, true);
 	}
 
 	public reset() {
 		this.forged = false;
-		this.targetForge = null;
 		this.startTime = 0;
 	}
 
@@ -32,7 +31,7 @@ class ForgeToolAction extends GoapAction{
 
 	public checkProceduralPrecondition (agent: VGameObject): boolean {
 		//TODO: find the nearest forge
-		let forges: ForgeComponent[] = [];
+		let forges: ForgeComponent[] = Environment.forgeComps;
 		let closest: ForgeComponent = null;
 		let closestDist: number = 0;
 		
@@ -54,8 +53,7 @@ class ForgeToolAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetForge = closest;
-		this.target = this.targetForge;
+		this.target = closest;
 		
 		return closest != null;
 	}

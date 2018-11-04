@@ -2,22 +2,20 @@
  * @Description: 
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:09:17 
- * @Last Modified by:   RannarYang 
- * @Last Modified time: 2018-09-06 00:09:17 
+ * @Last Modified by: RannarYang
+ * @Last Modified time: 2018-10-28 11:32:49
  */
 class DropOffFirewoodAction extends GoapAction {
 	private droppedOffFirewood: boolean = false;
-	private targetSupplyPile: SupplyPileComponent; // where we drop off the firewood
 	public constructor() {
 		super();
-		this.addPrecondition("hasFirewood", true); // can't drop off firewood if we don't already have some
-		this.addEffect("hasFirewood", false); // we now have no firewood
-		this.addEffect("collectFirewood", true); // we collected firewood
+		this.addPrecondition(ActionStatus.HasFirewood, true); // can't drop off firewood if we don't already have some
+		this.addEffect(ActionStatus.HasFirewood, false); // we now have no firewood
+		this.addEffect(ActionStatus.CollectFirewood, true); // we collected firewood
 	}
 
 	public reset(): void {
 		this.droppedOffFirewood = false;
-		this.targetSupplyPile = null;
 	}
 
 	public isDone() {
@@ -29,7 +27,7 @@ class DropOffFirewoodAction extends GoapAction {
 	}
 	public checkProceduralPrecondition (agent: VGameObject): boolean {
 		// TODO:find the nearest supply pile that has spare firewood
-		let supplyPiles: SupplyPileComponent[] = [];
+		let supplyPiles: SupplyPileComponent[] = Environment.supplyPileComps;
 		let closest: SupplyPileComponent = null;
 		let closestDist: number = 0;
 		
@@ -51,8 +49,7 @@ class DropOffFirewoodAction extends GoapAction {
 		if (closest == null)
 			return false;
 
-		this.targetSupplyPile = closest;
-		this.target = this.targetSupplyPile;
+		this.target = closest;
 		
 		return closest != null;
 	}

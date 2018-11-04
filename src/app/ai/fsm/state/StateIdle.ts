@@ -11,6 +11,7 @@ class StateIdle extends StateBase {
         let iGoap: IGoap = this.owner.getOwner();
         let planner: GoapPlanner = this.owner.getPlanner();
         let avaliableActions: GoapAction[] = this.owner.getAvaliableActions();
+        console.log("avaliableActions: ", avaliableActions);
         // GOAP planning
 
         // get the world state and the goal we want to plan for

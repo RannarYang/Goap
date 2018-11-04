@@ -3,25 +3,23 @@
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:13:23 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:13:50
+ * @Last Modified time: 2018-10-28 11:36:36
  */
 class MineOreAction extends GoapAction{
 	private mined: boolean = false;
-	private targetRock: IronRockComponent; // where we get the ore from
 
 	private startTime: number = 0;
 	private miningDuration: number = 2; // seconds;
 
 	public constructor() {
 		super();
-		this.addPrecondition ("hasTool", true); // we need a tool to do this
-		this.addPrecondition ("hasOre", false); // if we have ore we don't want more
-		this.addEffect ("hasOre", true);
+		this.addPrecondition (ActionStatus.HasTool, true); // we need a tool to do this
+		this.addPrecondition (ActionStatus.HasOre, false); // if we have ore we don't want more
+		this.addEffect (ActionStatus.HasOre, true);
 	}
 
 	public reset(): void {
 		this.mined = false;
-		this.targetRock = null;
 		this.startTime = 0;
 	}
 
@@ -35,7 +33,7 @@ class MineOreAction extends GoapAction{
 
 	public checkProceduralPrecondition (agent: VGameObject): boolean{
 		//TODO: find the nearest rock that we can mine
-		let rocks: IronRockComponent[] = [];
+		let rocks: IronRockComponent[] = Environment.rockComps;
 		let closest: IronRockComponent = null;
 		let closestDist: number = 0;
 		
@@ -54,8 +52,7 @@ class MineOreAction extends GoapAction{
 				}
 			}
 		}
-		this.targetRock = closest;
-		this.target = this.targetRock;
+		this.target = closest;
 		
 		return closest != null;
 	}
@@ -69,11 +66,11 @@ class MineOreAction extends GoapAction{
 			let backpack: BackPackComponent = labourer.backpack;;
 			backpack.numOre += 2;
 			this.mined = true;
-			let tool: ToolComponent = backpack.tool;
+			let tool: ToolComponent = labourer.tool;
 			tool.use(0.5);
 			if (tool.destroyed()) {
 				//TODO:删除 Destroy(backpack.tool);
-				backpack.tool = null;
+				labourer.destroyTool();
 			}
 		}
 		return true;

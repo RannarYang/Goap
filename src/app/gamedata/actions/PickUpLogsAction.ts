@@ -3,20 +3,19 @@
  * @Author: RannarYang 
  * @Date: 2018-09-06 00:14:10 
  * @Last Modified by: RannarYang
- * @Last Modified time: 2018-09-06 00:14:33
+ * @Last Modified time: 2018-10-28 11:36:49
  */
 class PickUpLogsAction extends GoapAction{
 	private hasLogs: boolean = false;
-	private targetSupplyPile: SupplyPileComponent;  // where we get the logs from
+	public target: SupplyPileComponent;  // where we get the logs from
 	public constructor() {
 		super();
-		this.addPrecondition ("hasLogs", false); // don't get a logs if we already have one
-		this.addEffect ("hasLogs", true); // we now have a logs
+		this.addPrecondition (ActionStatus.HasLogs, false); // don't get a logs if we already have one
+		this.addEffect (ActionStatus.HasLogs, true); // we now have a logs
 	}
 
 	public reset() {
 		this.hasLogs = false;
-		this.targetSupplyPile = null;
 	}
 
 	public isDone(): boolean {
@@ -53,15 +52,14 @@ class PickUpLogsAction extends GoapAction{
 		if (closest == null)
 			return false;
 
-		this.targetSupplyPile = closest;
-		this.target = this.targetSupplyPile;
+		this.target = closest;
 		
 		return closest != null;
 	}
 	
 	public perform (labourer: Labourer): boolean {
-		if (this.targetSupplyPile.numLogs > 0) {
-			this.targetSupplyPile.numLogs -= 1;
+		if (this.target.numLogs > 0) {
+			this.target.numLogs -= 1;
 			this.hasLogs = true;
 			//TODO play effect, change actor icon
 			let backpack = labourer.backpack;

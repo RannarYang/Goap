@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin class="LoggerSkin" width="50" height="50" xmlns:e="http://ns.egret.com/eui">
+<e:Skin class="LoggerSkin" width="100" height="100" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
     <e:Rect left="0" right="0" top="0" bottom="0" fillColor="0xeae518"/>
+    <e:Label text="樵夫" y="3" fontFamily="Microsoft YaHei" size="20" horizontalCenter="0" stroke="2"/>
+	<e:Label id="txtLogNum" text="原木：" y="25" fontFamily="Microsoft YaHei" size="20" horizontalCenter="0" stroke="2"/>
+
 </e:Skin>
